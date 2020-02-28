@@ -12,8 +12,10 @@ def read_file(filename):
 def histogram(text):
     hist = {}
     for c in text:
-        if ord(c) != ' ' and c != '\n':
-            hist[c.lower()] = hist.get(c.lower(), 0)+1
+        c = c.lower()
+        cNb = ord(c)
+        if (cNb >= 97 and cNb <= 122) or (cNb >= 191 and cNb <= 254):
+            hist[c] = hist.get(c, 0)+1
     return hist
 
 def normalize(hist):
@@ -25,8 +27,8 @@ def normalize(hist):
 
 def trainLanguage(language, filename):
     newDict = normalize(histogram(read_file(filename)))
-    if os.path.isfile('dict' + language):
-        with open('dict' + language, 'rb') as file:
+    if os.path.isfile('dict-comparaison/dict' + language):
+        with open('dict-comparaison/dict' + language, 'rb') as file:
             dict = pickle.Unpickler(file)
             dict = dict.load()
         for elt in dict.items():
@@ -35,13 +37,13 @@ def trainLanguage(language, filename):
     else:
         dict = newDict
 
-    with open('dict' + language, 'wb') as file:
+    with open('dict-comparaison/dict' + language, 'wb') as file:
         nDict = pickle.Pickler(file)
         nDict.dump(dict)
     
 def returnDict(language):
-    if os.path.isfile('dict' + language):
-        with open('dict' + language, 'rb') as file:
+    if os.path.isfile('dict-comparaison/dict' + language):
+        with open('dict-comparaison/dict' + language, 'rb') as file:
             dict = pickle.Unpickler(file)
             dict = dict.load()
             return dict
@@ -55,17 +57,13 @@ def checkConnection(officialDict, dict):
         j += 1
     return(i * 100 / j)
 
-# textvf = normalize(histogram(read_file('textger.txt')))
-# print(checkConnection(returnDict('turc'), textvf))
 
+dico = normalize(histogram(read_file('textvf.txt')))
+print('ITALIEN ',checkConnection(returnDict('italien'), dico))
+print('ESPAGNOL',checkConnection(returnDict('espagnol'), dico))
+print('FRANCAIS',checkConnection(returnDict('francais'), dico))
+print('ANGLAIS',checkConnection(returnDict('anglais'), dico))
+print('ALLEMAND',checkConnection(returnDict('allemand'), dico))
 
-
-# dictvf = normalize(histogram(read_file('textvf.txt')))
-# dicten = normalize(histogram(read_file('texten.txt')))
-# dictger = normalize(histogram(read_file('textger.txt')))
-# dicttur = normalize(histogram(read_file('texttur.txt')))
-# print('ve = {}'.format(dicten.get('h')))
-# print('vf = {}'.format(dictvf.get('h')))
-# print('vger = {}'.format(dictger.get('h')))
-# print('vtur = {}'.format(dicttur.get('h')))
+# trainLanguage('espagnol','textespagnol.txt')
 
