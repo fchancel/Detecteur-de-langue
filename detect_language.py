@@ -6,24 +6,11 @@ import os.path
 from os import listdir
 
 def read_file(filename):
-    """
-    Lecture d'un fichier non binaire.
-
-    @filename = nom du fichier à lire
-    return une chaine de caractère représentant le contenu du fichier
-    """
     with open(filename, 'r') as file:
         text = file.read()
     return text
 
 def histogram(text):
-    """
-    Stock dans un dictionnaire toutes les lettres de l'alphabet (accent inclus) du texte ainsi que le nombre de fois où celle-ci est répété
-
-    @text = texte à analyser
-    return un dictionnaire ayant pour clef les lettres de l'alphabet trouvé dans le texte et pour valeur le nombre
-    où celle-ci fut trouvé dans le texte
-    """
     hist = {}
     for c in text:
         c = c.lower()
@@ -33,12 +20,6 @@ def histogram(text):
     return hist
 
 def normalize(hist):
-    """
-    Normalise les valeurs issu du dictionnaire fournit par la fonction histogram. Normaliser entre 0 et 1.
-
-    @hist = dictionnaire à normaliser
-    return un nouveau dictionnaire ayant pour clé les clés de @hist et pour valeurs la normalisation des valeurs issu de @hist
-    """
     total = sum(hist.values())
     dict = {k : r/total for k, r in hist.items()}
     dict1 = sorted(dict.items(),key = lambda t: t[1], reverse=True)
@@ -46,12 +27,6 @@ def normalize(hist):
 
 
 def trainLanguage(language, filename):
-    """
-    Entraine des dictionnaires à reconnaitre une langue
-
-    @language = nom de la langue à entrainé (nom donné en francais)
-    @filename = fichier avec lequel le dictionnaire doit être entrainé
-    """
     newDict = normalize(histogram(read_file(filename)))
     if os.path.isfile('dict-comparaison/dict' + language):
         with open('dict-comparaison/dict' + language, 'rb') as file:
@@ -67,13 +42,7 @@ def trainLanguage(language, filename):
         nDict = pickle.Pickler(file)
         nDict.dump(dict)
     
-def returnOfficialDict(language):
-    """
-    Retourne le dictionnaire entrainé du language demandé en paramètre.
-
-    @language = langue dont le dictionnaire entrainé est désiré
-    return dictionnaire entrainé
-    """
+def returnDict(language):
     if os.path.isfile('dict-comparaison/dict' + language):
         with open('dict-comparaison/dict' + language, 'rb') as file:
             dict = pickle.Unpickler(file)
@@ -81,13 +50,6 @@ def returnOfficialDict(language):
             return dict
 
 def checkConnection(officialDict, dico):
-    """
-    Calcul le pourcentage de correspondance entre le dictionnaire fournit et le dictionnaire entrainé
-
-    @officialDict = Dictionnaire entraîné issu du dossier dict-comparaison
-    @dico = Dictionnaire à comparé et créer avec la fonction normalize
-    return le pourcentage de correspondance
-    """
     if len(dico) == 0:
         return 0
     j = 0
@@ -99,12 +61,6 @@ def checkConnection(officialDict, dico):
     return(i * 100 / j)
 
 def findLanguage(dicNeedAnalyse):
-    """
-    Cherche quel langage est utilisé avec l'aide du dictionnaire fournit en paramètre
-
-    @dicNeedAnalyse = dictionnaire issu de la fonction normalize
-    return une chaine de caractère indiquant la langue utilisé
-    """
     result = {}
     for f in listdir('dict-comparaison'):
         with open('dict-comparaison/' + f, 'rb') as file:
@@ -113,3 +69,15 @@ def findLanguage(dicNeedAnalyse):
             result[f[4:]] = checkConnection(officialDict, dicNeedAnalyse)
     result = sorted(result.items(),key = lambda t: t[1], reverse=True)
     return(result[0][0])
+            
+
+dico = normalize(histogram(read_file('textvf.txt')))
+findLanguage(dico)
+# print('ITALIEN ',checkConnection(returnDict('italien'), dico))
+# print('ESPAGNOL',checkConnection(returnDict('espagnol'), dico))
+# print('FRANCAIS',checkConnection(returnDict('francais'), dico))
+# print('ANGLAIS',checkConnection(returnDict('anglais'), dico))
+# print('ALLEMAND',checkConnection(returnDict('allemand'), dico))
+
+# trainLanguage('espagnol','textespagnol.txt')
+
