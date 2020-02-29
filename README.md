@@ -2,7 +2,7 @@
 
 Fonctionne uniquement sur des textes longs.
 
-Gère le francais, l'anglais, l'allemand, l'espagnol et l'italien
+Gère actuellement le francais, l'anglais, l'allemand, l'espagnol et l'italien (Possibilité de rajouter de nouvelle langue avec l'aide de l'entraineur de langue)
 
 ## Challenge
 
@@ -32,6 +32,8 @@ les différentes langues.
 Le dictionnaire entraîné possédant le plus haut pourcentage de comptabilité avec 
 le dictionnaire issu du texte est considéré comme language utilisé dans le fichier
 dont l'analyse était demandé.
+
+
 
 ## Usage
 
