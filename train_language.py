@@ -4,7 +4,7 @@
 import sys
 import os.path
 import pickle
-from function/functions import *
+from functions import *
 
 if len(sys.argv) < 2:
     print('Utilisation : {0} LANGUE  FICHIER\n\
