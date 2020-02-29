@@ -47,6 +47,6 @@ Saisissez `./detect_language.py --help` pour plus d'information
 Entraînement d'une langue :
 
 
-Utilisation :  ./train_language.py LANGUE  FICHIER`
+Utilisation :  `./train_language.py LANGUE  FICHIER`
 
 Saisissez ` ./train_language.py --help` pour plus d'information
